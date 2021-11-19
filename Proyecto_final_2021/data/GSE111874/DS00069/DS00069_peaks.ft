@@ -1,0 +1,59 @@
+; matrix-scan  -v 1 -matrix_format tab -m motifs/Lrp.tab -pseudo 1 -decimals 1 -2str -origin start -bgfile genomes/Escherichia_coli_GCF_000005845.2_ASM584v2/oligo-frequencies/2nt_upstream-noorf_Escherichia_coli_GCF_000005845.2_ASM584v2-ovlp-1str.freq -bg_pseudo 0.01 -return sites -return pval -return rank -lth score 1 -uth pval 1e-05 -i ChIP-seq_collection/GSE111874/datasets/DS00069/DS00069_peaks.fasta -seq_format fasta -n score -o ChIP-seq_collection/GSE111874/datasets/DS00069/DS00069_peaks.ft
+; Slow counting mode            
+; Input files
+;	input	ChIP-seq_collection/GSE111874/datasets/DS00069/DS00069_peaks.fasta
+;	bg	genomes/Escherichia_coli_GCF_000005845.2_ASM584v2/oligo-frequencies/2nt_upstream-noorf_Escherichia_coli_GCF_000005845.2_ASM584v2-ovlp-1str.freq
+; Matrix files
+;	matrix 1	motifs/Lrp.tab
+; Sequence format      	fasta
+; Output files
+;	output	ChIP-seq_collection/GSE111874/datasets/DS00069/DS00069_peaks.ft
+; Pseudo counts        	1
+; Background model
+;	Method        	file
+;	Markov order  	1
+;	Strand        	sensitive
+;	Background pseudo-frequency	0.01
+;	Residue probabilities
+;		a	0.29156
+;		c	0.20734
+;		g	0.20354
+;		t	0.29756
+; Thresholds	lower	upper
+;	pval  	NA	1e-05
+;	score 	1    	NA
+; Output columns
+;	1	seq_id
+;	2	ft_type
+;	3	ft_name
+;	4	strand
+;	5	start
+;	6	end
+;	7	sequence
+;	8	weight
+#seq_id	ft_type	ft_name	strand	start	end	sequence	weight	Pval	ln_Pval	sig	rank	rank_pm
+DS00069_peak_1::NC_000913.3:85268-85513(.)	site	Lrp	D	106	118	GAATTTTATTCTG	8.7	6.2e-07	-14.301	6.211	1	1
+DS00069_peak_2::NC_000913.3:419202-419492(.)	site	Lrp	D	122	134	GTGTTTTATACTG	7.8	7.1e-06	-11.860	5.151	1	1
+DS00069_peak_7::NC_000913.3:1237298-1237541(.)	site	Lrp	D	86	98	GAATTTTATGCTG	7.9	5.4e-06	-12.120	5.264	1	1
+DS00069_peak_7::NC_000913.3:1237298-1237541(.)	site	Lrp	D	231	243	GATTATTATTCTT	7.9	5.4e-06	-12.120	5.264	2	2
+DS00069_peak_16::NC_000913.3:3050750-3051060(.)	site	Lrp	R	115	127	GTTTTTTATTCTG	8.1	3.2e-06	-12.654	5.495	1	1
+DS00069_peak_17::NC_000913.3:3354188-3354510(.)	site	Lrp	R	98	110	GCATTTTATACTG	8.2	2.6e-06	-12.876	5.592	1	1
+;
+; Matrices
+;	matrix	name	ncol	nrow	pseudo	Wmin	Wmax	Wrange
+;	1	Lrp	13	4	1	-24.500	9.400	33.900	a:0.292 c:0.207 g:0.204 t:0.298 
+; Number of sequences scanned	23
+; Sum of sequence lengths	6353
+; N residues           	0
+; Matches per matrix
+;	matrix	name	matches	scored
+;	1	Lrp            	6	12154
+;		TOTAL          	6	12154
+; Host name	rsat-tagc
+; Job started	2021-11-05.232231
+; Job done	2021-11-05.232234
+; Seconds	2.99
+;	user	2.99
+;	system	0.01
+;	cuser	0
+;	csystem	0

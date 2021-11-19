@@ -1,0 +1,77 @@
+; matrix-scan  -v 1 -matrix_format tab -m motifs/Lrp.tab -pseudo 1 -decimals 1 -2str -origin start -bgfile genomes/Escherichia_coli_GCF_000005845.2_ASM584v2/oligo-frequencies/2nt_upstream-noorf_Escherichia_coli_GCF_000005845.2_ASM584v2-ovlp-1str.freq -bg_pseudo 0.01 -return sites -return pval -return rank -lth score 1 -uth pval 1e-05 -i ChIP-seq_collection/GSE111874/datasets/DS00071/DS00071_peaks.fasta -seq_format fasta -n score -o ChIP-seq_collection/GSE111874/datasets/DS00071/DS00071_peaks.ft
+; Slow counting mode            
+; Input files
+;	input	ChIP-seq_collection/GSE111874/datasets/DS00071/DS00071_peaks.fasta
+;	bg	genomes/Escherichia_coli_GCF_000005845.2_ASM584v2/oligo-frequencies/2nt_upstream-noorf_Escherichia_coli_GCF_000005845.2_ASM584v2-ovlp-1str.freq
+; Matrix files
+;	matrix 1	motifs/Lrp.tab
+; Sequence format      	fasta
+; Output files
+;	output	ChIP-seq_collection/GSE111874/datasets/DS00071/DS00071_peaks.ft
+; Pseudo counts        	1
+; Background model
+;	Method        	file
+;	Markov order  	1
+;	Strand        	sensitive
+;	Background pseudo-frequency	0.01
+;	Residue probabilities
+;		a	0.29156
+;		c	0.20734
+;		g	0.20354
+;		t	0.29756
+; Thresholds	lower	upper
+;	pval  	NA	1e-05
+;	score 	1    	NA
+; Output columns
+;	1	seq_id
+;	2	ft_type
+;	3	ft_name
+;	4	strand
+;	5	start
+;	6	end
+;	7	sequence
+;	8	weight
+#seq_id	ft_type	ft_name	strand	start	end	sequence	weight	Pval	ln_Pval	sig	rank	rank_pm
+DS00071_peak_12::NC_000913.3:83593-85761(.)	site	Lrp	D	1781	1793	GAATTTTATTCTG	8.7	6.2e-07	-14.301	6.211	1	1
+DS00071_peak_12::NC_000913.3:83593-85761(.)	site	Lrp	D	579	591	GATTATTATGCTG	7.9	5.4e-06	-12.120	5.264	2	2
+DS00071_peak_57::NC_000913.3:344901-345156(.)	site	Lrp	D	43	55	AGATATTATCCTG	7.9	5.4e-06	-12.120	5.264	1	1
+DS00071_peak_71::NC_000913.3:418887-419758(.)	site	Lrp	D	437	449	GTGTTTTATACTG	7.8	7.1e-06	-11.860	5.151	1	1
+DS00071_peak_113::NC_000913.3:605609-606374(.)	site	Lrp	R	152	164	GATTTTTATGCTG	7.7	9.3e-06	-11.588	5.032	1	1
+DS00071_peak_142::NC_000913.3:754700-754936(.)	site	Lrp	R	186	198	GGGTTTTATCCTG	8.4	1.5e-06	-13.381	5.811	1	1
+DS00071_peak_238::NC_000913.3:1235725-1237912(.)	site	Lrp	D	1659	1671	GAATTTTATGCTG	7.9	5.4e-06	-12.120	5.264	1	1
+DS00071_peak_238::NC_000913.3:1235725-1237912(.)	site	Lrp	D	1804	1816	GATTATTATTCTT	7.9	5.4e-06	-12.120	5.264	2	2
+DS00071_peak_250::NC_000913.3:1297088-1297418(.)	site	Lrp	R	173	185	GGATGTTATCCTG	8.2	2.6e-06	-12.876	5.592	1	1
+DS00071_peak_366::NC_000913.3:1772367-1772761(.)	site	Lrp	D	335	347	GTATTTTATTCTT	7.9	5.4e-06	-12.120	5.264	1	1
+DS00071_peak_427::NC_000913.3:2037271-2037796(.)	site	Lrp	D	404	416	TAATTTTATACTG	7.8	7.1e-06	-11.860	5.151	1	1
+DS00071_peak_475::NC_000913.3:2240894-2241280(.)	site	Lrp	D	150	162	GAATAATATCCTG	7.7	9.3e-06	-11.588	5.032	1	1
+DS00071_peak_564::NC_000913.3:2629157-2629816(.)	site	Lrp	D	446	458	GATGTTTATCCTG	7.9	5.4e-06	-12.120	5.264	1	1
+DS00071_peak_624::NC_000913.3:2939380-2939660(.)	site	Lrp	R	120	132	GAATTTTACCCTG	7.7	9.3e-06	-11.588	5.032	1	1
+DS00071_peak_626::NC_000913.3:2949021-2949241(.)	site	Lrp	R	173	185	TATTTTTATTCTG	8.0	4.3e-06	-12.366	5.370	1	1
+DS00071_peak_649::NC_000913.3:3050540-3051281(.)	site	Lrp	R	325	337	GTTTTTTATTCTG	8.1	3.2e-06	-12.654	5.495	1	1
+DS00071_peak_693::NC_000913.3:3257870-3258331(.)	site	Lrp	R	329	341	GAATATTCTCCTG	7.9	5.4e-06	-12.120	5.264	1	1
+DS00071_peak_714::NC_000913.3:3342963-3343282(.)	site	Lrp	R	134	146	GGATTTTATCCTT	8.1	3.2e-06	-12.654	5.495	1	1
+DS00071_peak_719::NC_000913.3:3353915-3354709(.)	site	Lrp	R	371	383	GCATTTTATACTG	8.2	2.6e-06	-12.876	5.592	1	1
+DS00071_peak_727::NC_000913.3:3374354-3375360(.)	site	Lrp	D	853	865	GTATATTATTCTG	8.9	2.8e-07	-15.082	6.550	1	1
+DS00071_peak_747::NC_000913.3:3485150-3485606(.)	site	Lrp	R	223	235	GTATTTTATCCGG	7.8	7.1e-06	-11.860	5.151	1	1
+DS00071_peak_781::NC_000913.3:3652907-3654123(.)	site	Lrp	R	789	801	GTATTATATTCTG	7.8	7.1e-06	-11.860	5.151	1	1
+DS00071_peak_799::NC_000913.3:3709331-3709694(.)	site	Lrp	D	301	313	GATTTTTCTCCTG	7.7	9.3e-06	-11.588	5.032	1	1
+DS00071_peak_991::NC_000913.3:4634498-4634888(.)	site	Lrp	R	90	102	GGAGTTTATCCTG	7.9	5.4e-06	-12.120	5.264	1	1
+;
+; Matrices
+;	matrix	name	ncol	nrow	pseudo	Wmin	Wmax	Wrange
+;	1	Lrp	13	4	1	-24.500	9.400	33.900	a:0.292 c:0.207 g:0.204 t:0.298 
+; Number of sequences scanned	993
+; Sum of sequence lengths	452927
+; N residues           	0
+; Matches per matrix
+;	matrix	name	matches	scored
+;	1	Lrp            	24	882022
+;		TOTAL          	24	882022
+; Host name	rsat-tagc
+; Job started	2021-11-06.055728
+; Job done	2021-11-06.060003
+; Seconds	155.05
+;	user	155.05
+;	system	0.03
+;	cuser	0
+;	csystem	0

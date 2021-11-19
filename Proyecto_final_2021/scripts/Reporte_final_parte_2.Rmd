@@ -1,0 +1,205 @@
+---
+title: "Reporte_final_2021"
+author: "Miguel Angel Martinez Rojas"
+date: "11/13/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Parte 2 de Reporte final
+## Evaluación de sitios de unión a Lrp en _E. coli_
+
+En primer lugar se guardó un objeto con los sitios de unión únicos previamente identificados, leyendo el archivo ordered_sites.txt
+
+```{r}
+
+library(dplyr)
+library(ggplot2)
+sites <- read.delim(file="../results/ordered_sites.txt", header=FALSE)
+colnames(sites) <- c("Start","Stop","Strand","Sequence")
+
+```
+
+Ahora se guardaron como objetos los datos de los archivos *sites.bed
+
+```{r}
+
+d69 <- read.delim(file="../data/GSE111874/DS00069/DS00069_sites.bed")
+d70 <- read.delim(file="../data/GSE111874/DS00070/DS00070_sites.bed")
+d71 <- read.delim(file="../data/GSE111874/DS00071/DS00071_sites.bed")
+d72 <- read.delim(file="../data/GSE111874/DS00072/DS00072_sites.bed")
+d73 <- read.delim(file="../data/GSE111874/DS00073/DS00073_sites.bed")
+d74 <- read.delim(file="../data/GSE111874/DS00074/DS00074_sites.bed")
+d75 <- read.delim(file="../data/GSE111874/DS00075/DS00075_sites.bed")
+d76 <- read.delim(file="../data/GSE111874/DS00076/DS00076_sites.bed")
+d77 <- read.delim(file="../data/GSE111874/DS00077/DS00077_sites.bed")
+```
+
+### Generación de data frames con argumentos lógicos de acuerdo al sitio de unión
+
+Se guardaron objetos que contuvieran la valoración de la unión de Lrp al respectivo sitio reportado en cada una de las nueve condiciones estudiadas:
+
+```{r}
+
+df69 <- data.frame(condition_1=sites$Start %in% d69$start)
+df70 <- data.frame(condition_2=sites$Start %in% d70$start)
+df71 <- data.frame(condition_3=sites$Start %in% d71$start)
+df72 <- data.frame(condition_4=sites$Start %in% d72$start)
+df73 <- data.frame(condition_5=sites$Start %in% d73$start)
+df74 <- data.frame(condition_6=sites$Start %in% d74$start)
+df75 <- data.frame(condition_7=sites$Start %in% d75$start)
+df76 <- data.frame(condition_8=sites$Start %in% d76$start)
+df77 <- data.frame(condition_9=sites$Start %in% d77$start)
+
+```
+
+Creación de data frame indicando si el sitio específico se une a Lrp en cada condición:  
+- Condición 1-3: Corresponde a medio mínimo + LIV  
+- Condición 4-6: Corresponde a medio enriquecido  
+- Condición 7-9: Corresponde a medio mínimo  
+
+```{r}
+
+summary_Lrp <- cbind(sites,df69,df70,df71,df72,df73,df74,df75,df76,df77)
+
+summary_Lrp
+
+```
+
+Además, se crean objetos para comparar los sitios de unión de acuerdo con fases de crecimiento:  
+- Condiciones 1, 4 y 7: Fase logarítmica  
+- Condiciones 2, 5 y 8: Fase de transición  
+- Condiciones 3, 6 y 9: Fase estacionaria  
+
+```{r}
+
+logaritmic_phase <- cbind(sites,df69,df72,df75)
+
+transition_phase <- cbind(sites,df70,df73,df76)
+
+stationary_phase <- cbind(sites,df71,df74,df77)
+
+logaritmic_phase
+transition_phase
+stationary_phase
+
+```
+
+### Generación de resumen visual de la dinámica temporal en los sitios de unión de acuerdo con el medio.
+
+Se decide crear una tabla que enliste el número de sitios de unión a Lrp donde las columnas sean las condiciones del medio, y las filas la fase de crecimiento. Para visualizar este comportamiento temporal de acuerdo a las condiciones nutricionales, se elabora un heatmap donde la fuente de variación se contrasta por columnas. Se permite la reordenación de columnas, encontrando cambios graduales de acuerdo con el enriquecimiento del medio Enriched>Mínimo+LIV>Mínimo.
+
+```{r}
+
+log_phase <- data.frame(col1=count(filter(logaritmic_phase,logaritmic_phase$condition_1==TRUE)),col2=count(filter(logaritmic_phase,logaritmic_phase$condition_4==TRUE)),col3=count(filter(logaritmic_phase,logaritmic_phase$condition_7==TRUE)))
+
+colnames(log_phase) <- c("Minimum_LIV","Enriched","Minimum")
+
+trans_phase <- data.frame(col1=count(filter(transition_phase,transition_phase$condition_2==TRUE)),col2=count(filter(transition_phase,transition_phase$condition_5==TRUE)),col3=count(filter(transition_phase,transition_phase$condition_8==TRUE)))
+
+colnames(trans_phase) <- c("Minimum_LIV","Enriched","Minimum")
+
+stat_phase <- data.frame(col1=count(filter(stationary_phase,stationary_phase$condition_3==TRUE)),col2=count(filter(stationary_phase,stationary_phase$condition_6==TRUE)),col3=count(filter(stationary_phase,stationary_phase$condition_9==TRUE)))
+
+colnames(stat_phase) <- c("Minimum_LIV","Enriched","Minimum")
+
+Sites_dynamics <- rbind(log_phase,trans_phase,stat_phase)
+
+rownames(Sites_dynamics) <- c("log_phase","trans_phase","stat_phase")
+
+Sites_dynamics_matrix <- as.matrix(Sites_dynamics)
+
+Temporal_Lrp_variation <- heatmap(Sites_dynamics_matrix, Rowv = NA, scale="column",col=cm.colors(256))
+
+```
+Las tablas relevantes se guardaron como archivo .Rdata en la carpeta de results, para poder cargarlos en futuras sesiones.  
+
+save(sites,summary_Lrp,logaritmic_phase,transition_phase,stationary_phase,Sites_dynamics,file="../results/Sites_per_condition.Rdata")  
+
+load("../results/Sites_per_condition.Rdata")  
+
+
+### Generación de data frames considerando la sensibilidad a los nutrientes del medio
+
+Para responder con la interrogante inicial, y determinar si la unión de Lrp a cada uno de los distintos sitios cambia de acuerdo con las condiciones nutricionales del medio, se decide construir un data frame que incluya a los sitios de unión como filas, y la "sensibilidad al medio" en cada una de las tres fases de crecimiento como columnas. **El valor "Present" indica que la unión de Lrp a ese sitio cambia en al menos una de las tres condiciones nutricionales (en la fase de crecimiento correspondiente), mientras que el valor "Absent" indica que no hay cambios entre estas condiciones.** NOTA: Esta tabla no distingue si hay cambios en la unión que dependan de la fase de crecimiento en una condición nutricional particular.
+
+```{r}
+
+log_phase_same <- logaritmic_phase %>% filter(condition_1==condition_4) %>% filter(condition_4==condition_7)
+
+log_phase_sorted <- data.frame(Change_log=ifelse(logaritmic_phase$Start %in% log_phase_same$Start, "Absent","Present"))
+
+trans_phase_same <- transition_phase %>% filter(condition_2==condition_5) %>% filter(condition_5==condition_8)
+
+trans_phase_sorted <- data.frame(Change_trans=ifelse(transition_phase$Start %in% trans_phase_same$Start, "Absent","Present"))
+
+stat_phase_same <- stationary_phase %>% filter(condition_3==condition_6) %>% filter(condition_6==condition_9)
+
+stat_phase_sorted <- data.frame(Change_stat=ifelse(stationary_phase$Start %in% stat_phase_same$Start, "Absent","Present"))
+
+media_sensitivity <- cbind(sites,log_phase_sorted,trans_phase_sorted,stat_phase_sorted)
+
+media_sensitivity
+
+```
+
+Se guarda la tabla "media_sensitivity" en la carpeta de results, para poder utilizarlos en futuras sesiones.  
+
+save(media_sensitivity,file="../results/Responsiveness_to_media.Rdata")  
+
+load("../results/Responsiveness_to_media.Rdata")  
+
+Además, se crea un archivo separado por comas utilizando los datos resumidos en esta tabla
+
+```{r}
+
+write.table(media_sensitivity,file="../results/media_sensitivity.csv",quote=FALSE,sep=",",row.names=FALSE)
+
+```
+
+Con la intención de averiguar si los sitios que no variaban en su unión a Lrp de acuerdo con las condiciones nutricionales, presentaban diferencias de acuerdo con la fase de crecimiento, se filtraron dichos sitios y se extrajeron los datos de las nueve condiciones, contenidas en "summary_Lrp". Se puede notar solo seis de los 34 sitios no tuvieron cambios asociados con las condiciones nutricionales, y que presentan unión a Lrp en todas las fases de crecimiento.
+
+```{r}
+
+Unaltered_sites <- media_sensitivity %>% filter(Change_log=="Absent") %>% filter(Change_trans=="Absent") %>% filter(Change_stat=="Absent")
+
+Unaltered_sites
+
+filter(summary_Lrp, summary_Lrp$Start %in% Unaltered_sites$Start)
+
+```
+### Generación de resumen visual de la proporción de sitios de unión a Lrp que tienen sensibilidad a las condiciones nutricionales por fase de crecimiento.
+
+Se obtiene el número de sitios de unión que cambia de acuerdo con los nutrientes, por cada una de las tres fases de crecimiento (datos de media_sensitivity), se guardan como matriz y se genera una gráfica de barras para poder visualizarlo. Podemos notar que la influencia de los nutrientes del medio sobre la unión de Lrp a sus sitios genómicos incrementa durante el crecimiento de *E. coli*
+
+```{r}
+
+sensitive_sites <- data.frame(col1=count(filter(media_sensitivity,media_sensitivity$Change_log=="Present")),col2=count(filter(media_sensitivity,media_sensitivity$Change_trans=="Present")),col3=count(filter(media_sensitivity,media_sensitivity$Change_stat=="Present")))
+
+colnames(sensitive_sites) <- c("Log_phase","Trans_phase","Stat_phase")
+
+sensitive_sites <- as.matrix(sensitive_sites)
+
+Site_nutrient_sens <- barplot(sensitive_sites,main="Lrp binding sites with nutritional sensitivity", xlab="Growth Phase",ylim=c(0,34), col="#B02D1F")
+
+```
+
+Se guardan las dos gráficas generadas como "ChIPseq_data_graphs.Rdata"
+
+save(Temporal_Lrp_variation,Site_nutrient_sens,file="../results/ChIPseq_data_graphs.Rdata")
+
+### Resumen de información obtenida
+
+Se utilizaron datos de un experimento de ChIP-seq evaluando los sitios de unión al factor de transcripción Lrp en *E. coli*. Estos datos se obtuvieron de muestras tomadas en tres fases del crecimiento bacteriano, de colonias expuestas a tres distintas condiciones nutricionales del medio, posteriormente, se depositaron en RegulonDB. Para este proyecto, principalmente se prestó atención en la información depositada en los archivos *sites.bed que contienen los sitios de unión posterior al procesamiento del algoritmo "peak calling" en cada una de las condiciones de crecimiento/nutrientes. A través del procesamiento de datos utilizando la línea de comandos en bash, así como RStudio, se pudo llegar a las siguientes conclusiones:  
+
+1. Se identificaron 34 sitios de unión distintos en las nueve condiciones.  
+2. La unión de 28 de estos sitios (82%) a Lrp cambiaba de acuerdo con la fase de crecimiento y/o las condiciones nutricionales.  
+3. La exposición a medio con nutrientes mínimos presentó un incremento en los sitios del genoma unidos a Lrp a lo largo del crecimiento.  
+4. La exposición a medio enriquecido tuvo una disminución en los sitios unidos a Lrp al pasar a la fase estacionaria.  
+5. La fase estacionaria de bacterias en medio mínimo alcanzó el máximo número de sitos unidos a Lrp, comparada con el resto de condiciones.  
+6. Hubo un incremento en la variabilidad de cada sitio de unión a Lrp atribuida a los nutrientes del medio de acuerdo con la fase de crecimiento (log<trans<stat). Alcanzando unión diferencial a Lrp en 23 sitios durante la fase estacionaria.  
+
+**Lo que seguiría en el algoritmo de procesamiento de estos datos, es la comparación de los sitios encontrados con los previamente reportados, y asociarlos a los genes correspondientes. De esta manera se podría realizar un análisis ontológico para determinar vías de señalización y actividad celular que respondieran de forma diferente a Lrp de acuerdo con las características nutricionales del medio.**
